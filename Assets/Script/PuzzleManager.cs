@@ -16,4 +16,5 @@ public abstract class PuzzleManager : MonoBehaviour
     public abstract PuzzleType puzzleType { get; }
     public abstract bool solved { get; set; }
     public abstract void Initialize();
+    public abstract void CheckWin();
 }

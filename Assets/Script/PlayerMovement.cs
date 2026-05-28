@@ -104,7 +104,7 @@ public class PlayerMovement : MonoBehaviour
     private float _xRotation = 0f;
     private float _yRotation = 0f;
     
-    private float _gravity = -9.81f;
+    private float _gravity = -20f;
 
     private Vector3 velocity;
     

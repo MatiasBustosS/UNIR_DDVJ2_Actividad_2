@@ -12,15 +12,16 @@ public class HudManager : MonoBehaviour
     [SerializeField] private Transform FlowFree;
     [SerializeField] private Transform CirclePuzzle;
 
-    [Header("CirclePuzzle")]
-    [SerializeField] private DiskPuzzle diskA;
-    [SerializeField] private DiskPuzzle diskB;
-    [SerializeField] private DiskPuzzle diskC;
+    [Header("Puzzles UI")]
+    [SerializeField] private CircleBoard circlePuzzle;
+    [SerializeField] private FlowBoard flowFreePuzzle;
+    [SerializeField] private ManiaBoard pipeManiaPuzzle;
+
+    public CircleBoard circleBoard => circlePuzzle;
+    public FlowBoard flowBoard => flowFreePuzzle;
+    public ManiaBoard pipeManiaBoard => pipeManiaPuzzle;
     
-    public DiskPuzzle DiskA => diskA;
-    public DiskPuzzle DiskB => diskB;
-    public DiskPuzzle DiskC => diskC;
-    
+    private PuzzleManager puzzleManager;
     
     private bool isTarget = false;
     
@@ -36,6 +37,11 @@ public class HudManager : MonoBehaviour
     public void OnTarget(bool target)
     {
         aim.localScale = !target ? Vector3.one : Vector3.one * 2f;
+    }
+
+    public void SetPuzzleManager(PuzzleManager manager)
+    {
+        puzzleManager = manager;
     }
     
     public void OpenPuzzle(PuzzleType getType)
@@ -68,11 +74,13 @@ public class HudManager : MonoBehaviour
             default:
                 break;
         }
-        
-        
-        
     }
 
+    public void CheckWin()
+    {
+        puzzleManager.CheckWin();
+    }
+    
     public void ClosePuzzle()
     {
         isTarget = false;
