@@ -16,6 +16,14 @@ public class HudManager : MonoBehaviour
     [SerializeField] private CircleBoard circlePuzzle;
     [SerializeField] private FlowBoard flowFreePuzzle;
     [SerializeField] private ManiaBoard pipeManiaPuzzle;
+    
+    [Header("Others")]
+    [SerializeField] private GameObject win;
+    [SerializeField] private GameObject lose;
+    [SerializeField] private Animator fade;
+
+    private bool isWin = false;
+    private bool isLose = false; 
 
     public CircleBoard circleBoard => circlePuzzle;
     public FlowBoard flowBoard => flowFreePuzzle;
@@ -87,5 +95,26 @@ public class HudManager : MonoBehaviour
         aim.gameObject.SetActive(true);
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
+
+    public void Win()
+    {
+        if(isLose) return;
+        isWin = true;
+        FadeOut();
+        win.SetActive(true);
+    }
+
+    public void Lose()
+    {
+        if(isWin)  return;
+        isLose = true;
+        FadeOut();
+        lose.SetActive(true);
+    }
+    
+    private void FadeOut()
+    {
+        fade.SetTrigger("FadeOut");
     }
 }

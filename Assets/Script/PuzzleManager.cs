@@ -19,8 +19,9 @@ public abstract class PuzzleManager : MonoBehaviour
     public abstract void Initialize();
     public abstract void CheckWin();
 
-    public void OpenDoor()
+    protected void OpenDoor()
     {
+        if (doorToOpen == null)  return;
         foreach (OpenDoor door in doorToOpen)
             door.Open();
     }

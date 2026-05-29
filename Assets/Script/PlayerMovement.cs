@@ -38,6 +38,8 @@ public class PlayerMovement : MonoBehaviour
     
     private bool isCrouching = false;
     
+    private bool canMove = true;
+    
     
     void Start()
     {
@@ -91,14 +93,17 @@ public class PlayerMovement : MonoBehaviour
     }
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (!canMove) return;
         _movement = context.ReadValue<Vector2>();
     }
     public void OnRotate(InputAction.CallbackContext context)
     {
+        if (!canMove) return;
         _rotate = context.ReadValue<Vector2>();
     }
     public void OnJump(InputAction.CallbackContext context)
     {
+        if (!canMove) return;
         if (context.performed)
         {
             _jump = true;
@@ -107,6 +112,7 @@ public class PlayerMovement : MonoBehaviour
     RaycastHit _hit;
     public void OnInteract(InputAction.CallbackContext context)
     {
+        if (!canMove) return;
         if(HudManager.Instance.IsTarget) return;
         
         animator.SetTrigger("Interact");
@@ -119,6 +125,7 @@ public class PlayerMovement : MonoBehaviour
                 return;
             }
             
+            animator.SetFloat("HSpeed", 0);
             HudManager.Instance.OpenPuzzle(_hit.collider.GetComponent<PuzzleManager>().puzzleType);
             _hit.collider.GetComponent<PuzzleManager>().Initialize();
         }
@@ -129,12 +136,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float crouchHeight = 1f;
     [SerializeField] private Vector3 normalCenter = new Vector3(0, 1f, 0);
     [SerializeField] private Vector3 crouchCenter = new Vector3(0, 0.5f, 0);
+    [SerializeField] private float normalRadius = .44f;
+    [SerializeField] private float crouchRadius = .22f;
     public void OnCrouch(InputAction.CallbackContext context)
     {
+        if (!canMove) return;
         isCrouching = !isCrouching;
         animator.SetBool("isCrouch", isCrouching);
         _controller.center = isCrouching ? crouchCenter : normalCenter;
         _controller.height = isCrouching ? crouchHeight : normalHeight;
+        _controller.radius = isCrouching ? crouchRadius : normalRadius;
     }
 
 
@@ -150,6 +161,8 @@ public class PlayerMovement : MonoBehaviour
     
     void Update()
     {
+        if (!canMove) return;
+        
         Move();
         Rotate();
         HandleGravity();
@@ -164,7 +177,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move()
     {
-        if (HudManager.Instance.IsTarget) return;
+        if (HudManager.Instance.IsTarget)
+        {
+            return;
+        }
 
         Vector3 move = transform.right * _movement.x / 2 + transform.forward * _movement.y;
         move *= isCrouching ? 0.2f : 0.8f;
@@ -237,5 +253,20 @@ public class PlayerMovement : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawRay(playerCamera.transform.position, playerCamera.transform.forward*5);
+    }
+
+    public void SetCanMove()
+    {
+        canMove = false;
+        animator.SetFloat("HSpeed", 0);
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Win"))
+        {
+            SetCanMove();
+            HudManager.Instance.Win();
+        }
     }
 }

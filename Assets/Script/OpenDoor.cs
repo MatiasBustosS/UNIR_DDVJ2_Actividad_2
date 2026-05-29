@@ -5,7 +5,7 @@ using UnityEngine;
 public class OpenDoor : MonoBehaviour
 {
     public enum Direction
-    { Up, Down, Left, Right }
+    { Up, Down, Left, Right,  Forward, Back }
 
     [SerializeField] private Direction direction;
     [SerializeField] private float distance;
@@ -14,22 +14,22 @@ public class OpenDoor : MonoBehaviour
     
     public void Open()
     {
-        StartCoroutine(MoveTo(transform.position + DirectionToVector() * distance));
+        StartCoroutine(MoveTo(transform.localPosition + DirectionToVector() * distance));
     }
 
     IEnumerator MoveTo(Vector3 target)
     {
-        Vector3 start = transform.position;
+        Vector3 start = transform.localPosition;
         float t = 0f;
 
         while (t < 1f)
         {
             t += Time.deltaTime * speed;
-            transform.position = Vector3.Lerp(start, target, t);
+            transform.localPosition = Vector3.Lerp(start, target, t);
             yield return null;
         }
 
-        transform.position = target;
+        transform.localPosition = target;
     }
 
     Vector3 DirectionToVector()
@@ -40,6 +40,8 @@ public class OpenDoor : MonoBehaviour
             case Direction.Down:  return Vector3.down;
             case Direction.Left:  return Vector3.left;
             case Direction.Right: return Vector3.right;
+            case Direction.Forward: return Vector3.forward;
+            case Direction.Back: return Vector3.back;
         }
         return Vector3.zero;
     }
