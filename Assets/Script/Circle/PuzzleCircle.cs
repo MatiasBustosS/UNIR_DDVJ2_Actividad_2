@@ -13,7 +13,7 @@ public class PuzzleCircle : PuzzleManager
     
     [SerializeField] private Vector3Int initialPosition;
     [SerializeField] private Vector3Int solution;
-    public override bool solved { get; set; }
+    public override bool solved { get; set; } =  false;
 
 
     private void Start()
@@ -41,6 +41,6 @@ public class PuzzleCircle : PuzzleManager
         if(!discC.IsAtIndex(solution.z)) return;
             
         solved = true;
-        Debug.Log("PUZZLE SOLVED");
+        OpenDoor();
     }
 }

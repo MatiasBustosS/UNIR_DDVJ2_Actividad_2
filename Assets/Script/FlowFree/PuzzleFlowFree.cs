@@ -9,7 +9,7 @@ public class PuzzleFlowFree : PuzzleManager
     [SerializeField] private Vector2Int size;
     [SerializeField] private List<Road> colorsRoads;
 
-    public override bool solved { get; set; }
+    public override bool solved { get; set; } =  false;
     public override void Initialize()
     {
         HudManager.Instance.SetPuzzleManager(this);
@@ -33,7 +33,8 @@ public class PuzzleFlowFree : PuzzleManager
             }
         }
 
-        Debug.Log("GANASTE");
+        solved = true;
+        OpenDoor();
     }
     
 }

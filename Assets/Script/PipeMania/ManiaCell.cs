@@ -74,8 +74,6 @@ public class ManiaCell : MonoBehaviour, IPointerClickHandler
 
         RotatePiece();
         
-        print(connections);
-        
         HudManager.Instance.CheckWin();
     }
 

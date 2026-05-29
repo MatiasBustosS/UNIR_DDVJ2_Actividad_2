@@ -5,8 +5,9 @@ using UnityEngine;
 public class PuzzlePipeMania : PuzzleManager
 {
     public override PuzzleType puzzleType => PuzzleType.PipeMania;
-    public override bool solved { get; set; }
-    
+    public override bool solved { get; set; } =  false;
+
+
     [SerializeField] private Vector2Int size;
     [SerializeField] private Vector2Int[] solutionPath;
 
@@ -40,7 +41,8 @@ public class PuzzlePipeMania : PuzzleManager
 
         if (connected)
         {
-            Debug.Log("GANASTE");
+            solved = true;
+            OpenDoor();
         }
     }
     bool Search(ManiaCell start, HashSet<ManiaCell> visited)
